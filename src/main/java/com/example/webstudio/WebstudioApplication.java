@@ -13,5 +13,19 @@ public class WebstudioApplication {
 		SpringApplication.run(WebstudioApplication.class, args);
 	}
 
+	@Bean
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping( "/**")
+						.allowedOrigins("http://naildelluna.store","http://naildelluna.shop","http://localhost:3000", "chrome-extension://aejoelaoggembcahagimdiliamlcdmfm") //talend api
+						.allowedMethods("*")
+						.maxAge(3000)
+						.allowCredentials(true);
+			}
+		};
+	}
+
 
 }

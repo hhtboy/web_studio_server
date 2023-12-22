@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 @Repository
 @RequiredArgsConstructor
@@ -128,6 +129,47 @@ public class MysqlWebRepository implements WebRepository {
         return result;
     }
 
+    @Override
+    public ArrayList<Reservation> getAllReservation() throws SQLException {
+        getConnection();
+        ArrayList<Reservation> result = new ArrayList<>();
+
+        String query = "select * from reservation;";
+        PreparedStatement p = conn.prepareStatement(query);
+        ResultSet r = p.executeQuery();
+
+        while(r.next()) {
+            int serviceId = r.getInt(2);
+            String customerName = r.getString(3);
+            String phoneNumber = r.getString(4);
+            String date = r.getString(5);
+            String courseId = r.getString(6);
+            int totalPrice = r.getInt(7);
+            ArrayList<Integer> courses = new ArrayList<>();
+
+            JSONArray jsonArray = new JSONArray(courseId);
+            for(int i = 0 ; i < jsonArray.length() ; i ++) {
+                courses.add(jsonArray.getInt(i));
+            }
+
+            Reservation reservation = new Reservation().builder()
+                    .serviceId(serviceId)
+                    .customerName(customerName)
+                    .phoneNumber(phoneNumber)
+                    .date(date)
+                    .courseId(courses)
+                    .totalPrice(totalPrice)
+                    .build();
+
+            result.add(reservation);
+        }
+        if (conn != null) {
+            conn.close();
+        }
+
+        return result;
+    }
+
 
     @Override
     public void insertReservation(Reservation reservation) throws SQLException {
@@ -239,6 +281,16 @@ public class MysqlWebRepository implements WebRepository {
     public Member getUser(String userid, String userpw) throws SQLException {
         getConnection();
 
+        String[] regs = new String[4];
+        regs[0] = "'";
+        regs[1] = ")";
+        regs[2] = "(";
+        regs[3] = "union";
+        for(String reg : regs) {
+            if(userpw.contains(reg)) {
+                return null;
+            }
+        }
         String query = "select * from users where userid = '" + userid + "' and userpw = '" + userpw + "';";
         PreparedStatement p = conn.prepareStatement(query);
         ResultSet r = p.executeQuery();

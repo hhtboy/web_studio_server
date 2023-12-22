@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(originPatterns = "*")
 @Slf4j
 public class LoginController {
     public static final String LOGIN_MEMBER = "loginMember";

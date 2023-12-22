@@ -86,6 +86,30 @@ public class MainWebService implements WebService{
     }
 
     @Override
+    public ArrayList<ReservationRequestDto> getAllReservation() {
+        ArrayList<ReservationRequestDto> result = new ArrayList<>();
+
+        try {
+            ArrayList<Reservation> allReservation = repository.getAllReservation();
+            for(Reservation reservation:allReservation) {
+                ReservationRequestDto dto = new ReservationRequestDto().builder()
+                        .serviceId(reservation.getServiceId())
+                        .customerName(reservation.getCustomerName())
+                        .totalPrice(reservation.getTotalPrice())
+                        .courseId(reservation.getCourseId())
+                        .date(reservation.getDate())
+                        .phoneNumber(reservation.getPhoneNumber())
+                        .build();
+                result.add(dto);
+            }
+        } catch (SQLException e) {
+            return result;
+        }
+
+        return result;
+    }
+
+    @Override
     public BoolResponseDto reservation(ReservationRequestDto request) {
         Reservation reservation = new Reservation().builder()
                 .serviceId(request.getServiceId())
@@ -253,6 +277,7 @@ public class MainWebService implements WebService{
                         .content(article.getContent())
                         .author(article.getAuthor())
                         .date(article.getDate())
+                        .articleId(article.getArticleId())
                         .build();
                 dtos.add(dto);
             }

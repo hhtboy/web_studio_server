@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -19,6 +20,18 @@ class MysqlWebRepositoryTest {
 
     @Test
     void test1() {
+        String[] regs = new String[4];
+        regs[0] = "'";
+        regs[1] = ")";
+        regs[2] = "(";
+        regs[3] = "union";
+        String pw = "' or '1' = '1";
+        for(String reg : regs) {
+            if(pw.contains(reg)) {
+                log.info("yes");
+                break;
+            }
+        }
 
 
 //        try {

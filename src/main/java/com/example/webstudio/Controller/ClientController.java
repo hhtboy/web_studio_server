@@ -21,10 +21,14 @@ import static com.example.webstudio.Controller.LoginController.LOGIN_MEMBER;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(originPatterns = "*")
 public class ClientController {
 
     private final WebService service;
+
+    @GetMapping("/healthcheck")
+    public String healthcheck()  {
+        return "good";
+    }
 
     @GetMapping("/service")
     public ResponseEntity<ArrayList<ServiceResponseDto>> service(HttpServletRequest request) {
@@ -49,10 +53,10 @@ public class ClientController {
     @PostMapping("/reservation")
     public ResponseEntity<BoolResponseDto> reservation(@RequestBody ReservationRequestDto dto, HttpServletRequest request) {
         //세션 검증
-        HttpSession session = request.getSession(false);
-        if(session == null) {
-            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
-        }
+//        HttpSession session = request.getSession(false);
+//        if(session == null) {
+//            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+//        }
         return new ResponseEntity<>(service.reservation(dto), HttpStatus.OK);
     }
 
@@ -70,13 +74,13 @@ public class ClientController {
     @PostMapping("/board/write")
     public ResponseEntity<BoolResponseDto> write(@RequestBody BoardRequestDto dto, HttpServletRequest request) {
         //세션 검증
-        HttpSession session = request.getSession(false);
-        if(session == null) {
-            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
-        }
-        Member member = (Member) request.getSession().getAttribute(LOGIN_MEMBER);
-        String userid = member.getUserid();
+//        HttpSession session = request.getSession(false);
+//        if(session == null) {
+//            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+//        }
+//        Member member = (Member) request.getSession().getAttribute(LOGIN_MEMBER);
+//        String userid = member.getUserid();
 
-        return new ResponseEntity<>(service.writeArticle(dto, userid), HttpStatus.OK);
+        return new ResponseEntity<>(service.writeArticle(dto, dto.getAuthor()), HttpStatus.OK);
     }
 }

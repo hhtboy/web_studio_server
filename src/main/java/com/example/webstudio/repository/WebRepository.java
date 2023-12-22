@@ -11,6 +11,8 @@ public interface WebRepository {
 
     ArrayList<Product> getAllProduct()throws SQLException;
 
+    ArrayList<Reservation> getAllReservation()throws SQLException;
+
     void insertReservation(Reservation reservation)throws SQLException;
 
     void insertService(Service service) throws SQLException;

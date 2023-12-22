@@ -16,6 +16,8 @@ public interface WebService {
 
     ArrayList<ProductResponseDto> getAllProduct();
 
+    ArrayList<ReservationRequestDto> getAllReservation();
+
     BoolResponseDto reservation(ReservationRequestDto request);
 
     BoolResponseDto addService(ServiceRequestDto request);
